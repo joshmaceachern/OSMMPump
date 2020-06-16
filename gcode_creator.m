@@ -1,3 +1,10 @@
+%THIS FILE CREATES GCODE FOR USE WITH THE OSMM PUMP. IT USES DIALOG BOXES TO 
+%GET VALUES FROM THE USER. IF A FILE ALREADY EXISTS, IT WILL QUERY WHETHER THAT
+%FILE SHOULD BE APPENDED OR REPLACED
+
+%WRITTEN BY JOSHUA M. MACEACHERN. LICENSED FOR USE UNDER THE CREATIVE COMMONS 0 LICENSE
+%https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 %ESTABLISH WORKING FILENAME
 %MAKE SURE THE LOCATION EXISTS. IF NOT, GET FROM USER
 
@@ -41,7 +48,7 @@ volumeE = char(amounts(5));
 
                 
 %%GET INPUT FLOW RATE FROM USER
-prompt = {'Enter Volumetric Flow Rate in uL/min'};
+prompt = {'Enter Volumetric Flow Rate in uL/min. Leave empty to keep default/previously declared flow rate'};
 defaults = {[]};
 rowscols = [1, 20];
 title = "Flow Rate";
@@ -54,7 +61,7 @@ gcode = cstrcat("X", volumeA, ' ', ...
                 "Z", volumeC, " ", ...
                 "I", volumeD, " ", ...
                 "J", volumeE, " ", ...
-                "F", flowRate)
+                "F", flowRate);
 %%OUTPUT IF NO VOLUME SPECIFIED                
 if str2num(volumeA) == 0
   fprintf("No output for pump A declared, assuming 0 \n")
@@ -105,8 +112,10 @@ if isempty(gcode)
 else
    fprintf(gCodeFile, '%s\n\r', gcode);
    cont = "Yes";
+   
 end
- 
+%DISPLAY GENERATED GCODE
+fprintf(strcat('Gcode:', " ",gcode, "\n"))
 
 %QUERY IF WOULD LIKE TO ADD MORE
 
