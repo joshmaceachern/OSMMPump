@@ -1,0 +1,1 @@
+This folder contains stl files of all relevant components from the 3d design for 3d printing
