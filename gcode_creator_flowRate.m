@@ -11,9 +11,17 @@
 %THIS ALLOWS THE CODE TO ITERATE AND ADD MORE CODES AFTER RUNNING ONCE
 if (exist("path") && isempty(path)) || !exist(path)
     path = uigetdir("Where would you like to save your file?")
+    if path == 0 || isempty(path)
+      return
+    end
+    
 end
 if (exist("file") && isempty(file)) || !exist("file")
    file = inputdlg("What would you like to name your file?")
+   if file == 0 || isempty(file)
+     return
+   end
+   
 end
 
 
