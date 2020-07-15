@@ -18,7 +18,7 @@ if (exist("path") && isempty(path)) || !exist(path)
 end
 if (exist("file") && isempty(file)) || !exist("file")
    file = inputdlg("What would you like to name your file?")
-   if file == 0 || isempty(file)
+   if isempty(file)
      return
    end
    
@@ -33,15 +33,17 @@ if exist(strcat(path,char(file), ".gcode")) && !exist("gCodeFile", "var")
   prompt = strcat("The file", " ", char(file), ".gcode already exists.");
   replace = questdlg(prompt,'Continue?', "Replace", 'Append', 'Replace');
   if strcmp(replace, "Replace")
-    gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'w');
+    gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'wt');
     %gCodeFile = []
+    clear replace
   elseif strcmp(replace, "Append")
-    gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'a');
+    gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'at');
+    clear replace
   else
     return
   end
 else
-  gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'a');
+  gCodeFile = fopen(strcat(path,char(file), ".gcode"), 'at');
 end
 
 
@@ -101,6 +103,7 @@ if volumeE == 0
 end
 if isnan(volumeA) || isnan(volumeB) || isnan(volumeC) || isnan(volumeD) || isnan(volumeE) || isnan(time) || isnan(totalFlow)
   errordlg("Something went very wrong. Hopefully you never see this error. If you do see this error, god help you.")
+  clear all
   return
 end
 %SANITY CHECK, MAKE SURE ALL ENTERED VALUES ARE CORRECT
@@ -143,20 +146,21 @@ if strcmp(check, "No")
   gcode_creator_flowRate
 end  
 
-fprintf(gCodeFile, '%s\n', gcode);
-fprintf(strcat('Gcode:', " ",gcode, "\n"))
-
+fprintf(gCodeFile, '\n%s\n', gcode);
+printf(strcat('Gcode:', " ",gcode, "\n"))
+fclose(gCodeFile);
 %QUERY IF WOULD LIKE TO ADD MORE
 
   cont = questdlg("Would you like to add more commands?",...
                 "Continue?", "Yes", "No");
 if strcmp(cont, "Yes")
   gcode_creator_flowRate
-end
- if !strcmp(cont, "Yes");
-  loc = [];
-  fclose(gCodeFile);
+  %fclose(gCodeFile);
+elseif strcmp(cont, "No")
+  %file = [];
+  %fclose(gCodeFile);
+  file = [];
   clear all
-  
 end
+
 %fclose(gCodeFile);
