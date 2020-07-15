@@ -15,7 +15,7 @@ lengthOAL = pi*str2num(inputs{2});
 volume = crossSectionalArea*lengthOAL;
 
 %CALCULATE THE VOLUME PER STEP
-stepsRev = str2num(inputs{2})*str2num(inputs{3})*str2num(inputs{4});
+stepsRev = str2num(inputs{3})*str2num(inputs{4})*str2num(inputs{5});
 volPerStep = volume/stepsRev;
 stepsPerVol = stepsRev/volume;
 
